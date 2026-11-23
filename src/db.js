@@ -1,15 +1,15 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-// 1. Membuat Pool Koneksi ke Neon PostgreSQL menggunakan DATABASE_URL dari file .env
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false // Wajib untuk koneksi Cloud PostgreSQL seperti Neon
+    rejectUnauthorized: false 
   }
 });
 
-// 2. Fungsi untuk membuat tabel SQL otomatis jika belum ada (Auto-Migration)
+
 const initDB = async () => {
   const createTableQuery = `
     CREATE TABLE IF NOT EXISTS study_targets (
@@ -28,7 +28,7 @@ const initDB = async () => {
     await pool.query(createTableQuery);
     console.log('✅ Koneksi ke Neon PostgreSQL berhasil & Tabel "study_targets" siap!');
 
-    // Cek apakah tabel masih kosong, kalau kosong kita isi 2 data contoh (seed) biar pas dibuka gak kosong melompong
+    
     const { rows } = await pool.query('SELECT COUNT(*) FROM study_targets');
     if (parseInt(rows[0].count) === 0) {
       await pool.query(`

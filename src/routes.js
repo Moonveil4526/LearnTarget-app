@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { pool } = require('./db');
 
-// 1. [GET] Ambil semua data target belajar (Bisa difilter berdasarkan status / subject)
+
 router.get('/targets', async (req, res) => {
   try {
     const { status, search } = req.query;
@@ -10,13 +10,13 @@ router.get('/targets', async (req, res) => {
     const values = [];
     const conditions = [];
 
-    // Filter berdasarkan status jika ada
+    
     if (status && status !== 'Semua') {
       values.push(status);
       conditions.push(`status = $${values.length}`);
     }
 
-    // Filter pencarian judul atau mata pelajaran
+    
     if (search && search.trim() !== '') {
       values.push(`%${search.trim()}%`);
       conditions.push(`(title ILIKE $${values.length} OR subject ILIKE $${values.length})`);
@@ -26,7 +26,7 @@ router.get('/targets', async (req, res) => {
       query += ' WHERE ' + conditions.join(' AND ');
     }
 
-    // Urutkan dari yang terbaru dibuat
+    
     query += ' ORDER BY created_at DESC';
 
     const result = await pool.query(query, values);
@@ -37,12 +37,12 @@ router.get('/targets', async (req, res) => {
   }
 });
 
-// 2. [POST] Tambah target belajar baru
+
 router.post('/targets', async (req, res) => {
   try {
     const { title, subject, priority, status, target_date, notes } = req.body;
 
-    // Validasi input wajib
+    
     if (!title || !subject) {
       return res.status(400).json({ error: 'Judul dan Mata Pelajaran wajib diisi!' });
     }
@@ -69,7 +69,7 @@ router.post('/targets', async (req, res) => {
   }
 });
 
-// 3. [PUT] Update seluruh data target belajar (Edit via Modal)
+
 router.put('/targets/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -96,7 +96,7 @@ router.put('/targets/:id', async (req, res) => {
   }
 });
 
-// 4. [PATCH] Update cepat status belajar saja (Misal klik tombol "Selesai")
+
 router.patch('/targets/:id/status', async (req, res) => {
   try {
     const { id } = req.params;
@@ -118,7 +118,7 @@ router.patch('/targets/:id/status', async (req, res) => {
   }
 });
 
-// 5. [DELETE] Hapus target belajar
+
 router.delete('/targets/:id', async (req, res) => {
   try {
     const { id } = req.params;

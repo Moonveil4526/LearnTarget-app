@@ -3,12 +3,12 @@ let allTargets = [];
 let currentStatusFilter = 'Semua';
 let currentSearchQuery = '';
 
-// 1. Jalankan saat halaman pertama kali dibuka
+//Jalankan saat halaman pertama kali dibuka
 document.addEventListener('DOMContentLoaded', () => {
   fetchTargets();
 });
 
-// 2. [GET] Ambil semua data dari Backend Express (/api/targets)
+// [GET] Ambil semua data dari Backend Express (/api/targets)
 async function fetchTargets() {
   const loadingEl = document.getElementById('loading-state');
   const gridEl = document.getElementById('targets-grid');
@@ -35,7 +35,7 @@ async function fetchTargets() {
   }
 }
 
-// 3. Hitung dan update angka di 4 kartu statistik & Progress Bar
+// Hitung dan update angka di 4 kartu statistik & Progress Bar
 function updateDashboardStats(targets) {
   const total = targets.length;
   const pending = targets.filter(t => t.status === 'Belum Mulai').length;
@@ -52,7 +52,7 @@ function updateDashboardStats(targets) {
   document.getElementById('progress-bar').style.width = `${percentage}%`;
 }
 
-// 4. Render daftar kartu target belajar sesuai filter & pencarian
+//Render daftar kartu target belajar sesuai filter & pencarian
 function renderTargets() {
   const gridEl = document.getElementById('targets-grid');
   const emptyEl = document.getElementById('empty-state');
@@ -177,7 +177,7 @@ function renderTargets() {
   }).join('');
 }
 
-// 5. [POST / PUT] Simpan Target Baru atau Update Target ke Backend
+//[POST / PUT] Simpan Target Baru atau Update Target ke Backend
 async function handleFormSubmit(event) {
   event.preventDefault();
   const submitBtn = document.getElementById('submit-btn');
@@ -217,7 +217,7 @@ async function handleFormSubmit(event) {
   }
 }
 
-// 6. [PATCH] Update Cepat Status Belajar
+//[PATCH] Update Cepat Status Belajar
 async function quickUpdateStatus(id, newStatus) {
   try {
     const response = await fetch(`/api/targets/${id}/status`, {
@@ -233,7 +233,7 @@ async function quickUpdateStatus(id, newStatus) {
   }
 }
 
-// 7. [DELETE] Hapus Target Belajar
+//[DELETE] Hapus Target Belajar
 async function deleteTarget(id) {
   const confirmDelete = confirm('Yakin ingin menghapus target belajar ini?');
   if (!confirmDelete) return;
@@ -247,7 +247,7 @@ async function deleteTarget(id) {
   }
 }
 
-// 8. Fungsi Filter & Search
+// Fungsi Filter & Search
 function setFilterStatus(status) {
   currentStatusFilter = status;
   document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -265,7 +265,7 @@ function handleSearch(query) {
   renderTargets();
 }
 
-// 9. Fungsi Buka/Tutup Modal Form
+// Fungsi Buka/Tutup Modal Form
 function openModal() {
   document.getElementById('target-form').reset();
   document.getElementById('target-id').value = '';

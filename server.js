@@ -9,17 +9,17 @@ const apiRoutes = require('./src/routes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 1. Middleware
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// 2. Menyajikan file Frontend (HTML, CSS, JS) dari folder 'public'
+// Menyajikan file Frontenddari folder 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 3. Gunakan Routes API dengan prefix '/api'
+//Gunakan Routes API dengan prefix '/api'
 app.use('/api', apiRoutes);
 
-// 4. Route Health Check
+//Route Health Check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
@@ -27,7 +27,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// 5. Inisialisasi Database lalu jalankan Server
+// Inisialisasi Database lalu jalankan Server
 initDB().then(() => {
   app.listen(PORT, () => {
     console.log(`✅ Server berjalan di http://localhost:${PORT}`);
