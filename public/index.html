@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyTarget — Dashboard Target Belajar Siswa</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- ================= NAVBAR RESPONSIF ================= -->
+  <header class="sticky top-0 z-30 backdrop-blur-md bg-slate-950/80 border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-3">
+      <!-- Brand / Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-lg sm:text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-indigo-400 bg-clip-text text-transparent">
+            StudyTarget
+          </h1>
+          <p class="text-[11px] sm:text-xs text-slate-400 hidden sm:block">Fullstack Student Learning Tracker</p>
+        </div>
+      </div>
+
+      <!-- Tombol Tambah Target -->
+      <button
+        onclick="openModal()"
+        class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-semibold text-xs sm:text-sm px-3.5 py-2.5 sm:px-5 sm:py-2.5 rounded-xl shadow-lg shadow-indigo-600/25 transition-all cursor-pointer"
+      >
+        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        <span>Tambah Target</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
+
+    <!-- 1. HERO PROGRESS & STATISTIK (Responsif: 2 kolom di HP, 4 kolom di Tablet/PC) -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+      <!-- Progress Card Utama -->
+      <div class="lg:col-span-5 bg-gradient-to-br from-indigo-950/80 via-slate-900 to-slate-900 border border-indigo-500/30 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-xl">
+        <div>
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-1 rounded-full">
+            🎯 Progress Belajar
+          </span>
+          <h2 class="mt-3 text-xl sm:text-2xl font-bold text-white">Pantau Target Belajarmu!</h2>
+          <p class="mt-1 text-xs sm:text-sm text-slate-400">Selesaikan target tepat waktu dan tingkatkan konsistensi belajarmu setiap hari.</p>
+        </div>
+
+        <div class="mt-6">
+          <div class="flex items-center justify-between text-xs sm:text-sm font-medium mb-2">
+            <span class="text-slate-300">Tingkat Penyelesaian</span>
+            <span id="progress-percentage" class="text-indigo-400 font-bold text-base">0%</span>
+          </div>
+          <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden p-0.5">
+            <div id="progress-bar" class="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Kartu Statistik (2x2 di HP, 4 kolom di Tablet/PC) -->
+      <div class="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <!-- Total Target -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between">
+          <div class="w-9 h-9 rounded-lg bg-slate-800 text-slate-300 flex items-center justify-center">
+            📚
+          </div>
+          <div class="mt-3">
+            <p class="text-2xl sm:text-3xl font-extrabold text-white" id="stat-total">0</p>
+            <p class="text-xs text-slate-400 mt-0.5">Total Target</p>
+          </div>
+        </div>
+
+        <!-- Belum Mulai -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between">
+          <div class="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
+            ⏳
+          </div>
+          <div class="mt-3">
+            <p class="text-2xl sm:text-3xl font-extrabold text-amber-400" id="stat-pending">0</p>
+            <p class="text-xs text-slate-400 mt-0.5">Belum Mulai</p>
+          </div>
+        </div>
+
+        <!-- Sedang Dipelajari -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between">
+          <div class="w-9 h-9 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center">
+            🔥
+          </div>
+          <div class="mt-3">
+            <p class="text-2xl sm:text-3xl font-extrabold text-sky-400" id="stat-progress">0</p>
+            <p class="text-xs text-slate-400 mt-0.5">Dipelajari</p>
+          </div>
+        </div>
+
+        <!-- Selesai -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between">
+          <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+            ✅
+          </div>
+          <div class="mt-3">
+            <p class="text-2xl sm:text-3xl font-extrabold text-emerald-400" id="stat-done">0</p>
+            <p class="text-xs text-slate-400 mt-0.5">Selesai</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. FILTER & SEARCH BAR (Fleksibel: Bertumpuk di HP, Menyamping di Tablet/PC) -->
+    <section class="bg-slate-900/70 border border-slate-800/90 rounded-2xl p-3 sm:p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      <!-- Filter Status Tabs (Bisa di-scroll menyamping di layar HP kecil) -->
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 no-scrollbar" id="status-filters">
+        <button onclick="setFilterStatus('Semua')" data-status="Semua" class="filter-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-600 text-white transition">
+          Semua
+        </button>
+        <button onclick="setFilterStatus('Belum Mulai')" data-status="Belum Mulai" class="filter-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition">
+          ⏳ Belum Mulai
+        </button>
+        <button onclick="setFilterStatus('Sedang Dipelajari')" data-status="Sedang Dipelajari" class="filter-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition">
+          🔥 Sedang Dipelajari
+        </button>
+        <button onclick="setFilterStatus('Selesai')" data-status="Selesai" class="filter-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition">
+          ✅ Selesai
+        </button>
+      </div>
+
+      <!-- Search Box -->
+      <div class="relative w-full md:w-72 lg:w-80">
+        <input
+          type="text"
+          id="search-input"
+          oninput="handleSearch(this.value)"
+          placeholder="Cari materi atau mata pelajaran..."
+          class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:outline-none rounded-xl pl-10 pr-4 py-2 text-xs sm:text-sm text-slate-200 placeholder-slate-500"
+        />
+        <svg class="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 105 11a6 6 0 0012 0z"></path>
+        </svg>
+      </div>
+    </section>
+
+    <!-- 3. GRID DAFTAR TARGET BELAJAR (1 Kolom di HP, 2 Kolom di Tablet, 3 Kolom di PC) -->
+    <section>
+      <!-- Loading State -->
+      <div id="loading-state" class="py-16 text-center text-slate-400">
+        <div class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+        <p class="text-sm">Memuat data target belajar dari Neon PostgreSQL...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="hidden bg-slate-900/40 border border-dashed border-slate-800 rounded-2xl py-14 px-4 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-slate-800/80 mx-auto flex items-center justify-center text-2xl mb-3">
+          📭
+        </div>
+        <h3 class="text-base sm:text-lg font-bold text-white">Belum ada target belajar</h3>
+        <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto mt-1">
+          Yuk mulai tambahkan target materi atau mata pelajaran yang ingin kamu kuasai!
+        </p>
+        <button onclick="openModal()" class="mt-5 inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl transition">
+          + Buat Target Pertama
+        </button>
+      </div>
+
+      <!-- Cards Container -->
+      <div id="targets-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        <!-- Kartu Target Belajar dirender secara dinamis lewat public/app.js -->
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= MODAL TAMBAH / EDIT TARGET ================= -->
+  <div id="target-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden animate-fadeIn">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800">
+        <h3 id="modal-title" class="text-base sm:text-lg font-bold text-white">Tambah Target Belajar</h3>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Form -->
+      <form id="target-form" onsubmit="handleFormSubmit(event)" class="p-5 space-y-4">
+        <input type="hidden" id="target-id" />
+
+        <!-- Judul Materi -->
+        <div>
+          <label class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1.5">Judul Materi / Target Belajar *</label>
+          <input
+            type="text"
+            id="title"
+            required
+            placeholder="Contoh: Belajar Joins & Indexing di PostgreSQL"
+            class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:outline-none rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500"
+          />
+        </div>
+
+        <!-- Mata Pelajaran & Prioritas (1 kolom di HP kecil, 2 kolom di layar > sm) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1.5">Mata Pelajaran / Kategori *</label>
+            <input
+              type="text"
+              id="subject"
+              required
+              placeholder="Contoh: Web Dev / Matematika"
+              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:outline-none rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1.5">Prioritas</label>
+            <select
+              id="priority"
+              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:outline-none rounded-xl px-3.5 py-2.5 text-sm text-white"
+            >
+              <option value="High">🔴 High (Penting)</option>
+              <option value="Medium" selected>🟡 Medium (Normal)</option>
+              <option value="Low">🟢 Low (Santai)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Status & Target Tanggal Selesai -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1.5">Status Saat Ini</label>
+            <select
+              id="status"
+              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:outline-none rounded-xl px-3.5 py-2.5 text-sm text-white"
+            >
+              <option value="Belum Mulai">⏳ Belum Mulai</option>
+              <option value="Sedang Dipelajari">🔥 Sedang Dipelajari</option>
+              <option value="Selesai">✅ Selesai</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1.5">Target Tanggal Selesai</label>
+            <input
+              type="date"
+              id="target_date"
+              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:outline-none rounded-xl px-3.5 py-2.5 text-sm text-white"
+            />
+          </div>
+        </div>
+
+        <!-- Catatan Tambahan -->
+        <div>
+          <label class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1.5">Catatan / Link Referensi Belajar</label>
+          <textarea
+            id="notes"
+            rows="3"
+            placeholder="Tulis rincian materi, bab buku, atau link video tutorial..."
+            class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:outline-none rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500"
+          ></textarea>
+        </div>
+
+        <!-- Tombol Aksi Modal -->
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-800">
+          <button
+            type="button"
+            onclick="closeModal()"
+            class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:bg-slate-800 transition"
+          >
+            Batal
+          </button>
+          <button
+            type="submit"
+            id="submit-btn"
+            class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/25 transition"
+          >
+            Simpan Target
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-slate-900 py-6 text-center text-xs text-slate-500">
+    <p>Dibuat dengan 💻 Express.js, PostgreSQL (Neon) & Tailwind CSS — Fullstack Portfolio Project</p>
+  </footer>
+
+  <!-- Script Frontend -->
+  <script src="/app.js"></script>
+</body>
+</html>
