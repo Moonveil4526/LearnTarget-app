@@ -33,12 +33,13 @@ app.use('/api', apiRoutes);
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
+    hasDbUrl: Boolean(process.env.DATABASE_URL),
     message: 'Server Target Belajar Siswa & NeonDB sudah terhubung! 🚀'
   });
 });
 
-// 6. Jalankan app.listen hanya jika di локаl (bukan di Vercel Serverless)
-if (process.env.NODE_ENV !== 'production') {
+// 6. Jalankan app.listen hanya jika di lokal (bukan di Vercel Serverless)
+if (!process.env.VERCEL) {
   initDB().then(() => {
     dbInitialized = true;
     app.listen(PORT, () => {
